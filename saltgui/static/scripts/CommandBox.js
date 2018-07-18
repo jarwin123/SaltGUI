@@ -23,7 +23,7 @@ export class CommandBox {
     this.documentation = new Documentation(this);
     this._registerCommandBoxEventListeners();
 
-    RunType.createMenu();
+    RunType.createMenus();
     TargetType.createMenu();
 
     const titleElement = document.querySelector(".run-command #template-menu-here");
@@ -124,7 +124,15 @@ export class CommandBox {
     output.innerText = "Loading...";
 
     func.then(pResponse => {
-      if(pResponse) this.onRunReturn(pResponse.return[0], commandValue);
+      // The data.return array may contain the answer from several minion groups
+      // combine these first into one group for easier processing
+      const allResponses = { };
+      for(const group of pResponse.return) {
+        for(const host in group) {
+          allResponses[host] = group[host];
+        }
+      }
+      if(pResponse) this.onRunReturn(allResponses, commandValue);
       else this._showError("null response");
     }, pResponse => {
       this._showError(JSON.stringify(pResponse));
@@ -343,6 +351,12 @@ export class CommandBox {
       params.client = "local_async";
       // return looks like:
       // { "jid": "20180718173942195461", "minions": [ ... ] }
+    }
+    else if(params.client === "local" && runType === "batch") {
+      params.client = "local_batch";
+      params.batch = RunType.getBatchSize();
+      params.batch_wait = RunType.getBatchWait();
+      // it returns the actual output in a list of batches
     }
 
     return this.api.apiRequest("POST", "/", params);

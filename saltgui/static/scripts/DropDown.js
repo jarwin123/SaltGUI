@@ -89,11 +89,11 @@ export class DropDownMenu {
     this.menuButton.innerHTML = pTitle + "&nbsp;\u25BC";
   }
 
-  __showMenu() {
+  showMenu() {
     this.menuDropdown.style.display = "inline-block";
   }
 
-  __hideMenu() {
+  hideMenu() {
     this.menuDropdown.style.display = "none";
   }
 
