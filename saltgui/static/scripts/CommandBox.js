@@ -7,9 +7,10 @@ import {TargetType} from './TargetType.js';
 
 export class CommandBox {
 
-  constructor(pApi) {
+  constructor(pRouter, pApi) {
     const myThis = this;
 
+    this.router = pRouter;
     this.api = pApi;
     this.getRunParams = this.getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
@@ -20,7 +21,7 @@ export class CommandBox {
     const cmdbox = document.querySelector(".run-command #cmd-box");
     this.cmdmenu = new DropDownMenu(cmdbox);
 
-    this.documentation = new Documentation(this);
+    this.documentation = new Documentation(this.router, this);
     this._registerCommandBoxEventListeners();
 
     RunType.createMenu();

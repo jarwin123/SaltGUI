@@ -21,8 +21,8 @@ export class Router {
   constructor() {
     this._logoutTimer = this._logoutTimer.bind(this);
 
-    this.api = new API();
-    this.commandbox = new CommandBox(this.api);
+    this.api = new API(this);
+    this.commandbox = new CommandBox(this, this.api);
     this.currentRoute = undefined;
     this.routes = [];
 
