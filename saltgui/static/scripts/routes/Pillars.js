@@ -8,6 +8,9 @@ export class PillarsRoute extends PageRoute {
   constructor(pRouter) {
     super("pillars", "Pillars", "#page-pillars", "#button-pillars", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
     this._handlePillarsWheelKeyListAll = this._handlePillarsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
 
@@ -23,6 +26,7 @@ export class PillarsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("minion-list");
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handlePillarsWheelKeyListAll(pWheelKeyListAllData);
       localPillarObfuscatePromise.then(pLocalPillarObfuscateData => {
@@ -37,6 +41,7 @@ export class PillarsRoute extends PageRoute {
       myThis._handlePillarsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {
@@ -66,7 +71,7 @@ export class PillarsRoute extends PageRoute {
       this._addMenuItemShowPillars(menu, minionId);
 
       minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign("pillarsminion?minionid=" + encodeURIComponent(minionId))
+        this.router.showRoute(this.router.pillarsMinionRoute, {"minionId": minionId})
       );
     }
 
@@ -112,13 +117,13 @@ export class PillarsRoute extends PageRoute {
     this._addMenuItemShowPillars(menu, pMinionId);
 
     minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign(config.NAV_URL + "/pillarsminion?minionid=" + encodeURIComponent(pMinionId))
+      this.router.showRoute(this.router.pillarsMinionRoute, {"minionId": pMinionId})
     );
   }
 
   _addMenuItemShowPillars(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;pillars", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/pillarsminion?minionid=" + encodeURIComponent(pMinionId));
+      this.router.showRoute(this.router.pillarsMinionRoute, {"minionId": pMinionId});
     }.bind(this));
   }
 }

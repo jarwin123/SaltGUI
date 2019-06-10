@@ -8,6 +8,9 @@ export class SchedulesRoute extends PageRoute {
   constructor(pRouter) {
     super("schedules", "Schedules", "#page-schedules", "#button-schedules", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
     this._handleSchedulesWheelKeyListAll = this._handleSchedulesWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
 
@@ -23,6 +26,7 @@ export class SchedulesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("minion-list");
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleSchedulesWheelKeyListAll(pWheelKeyListAllData);
       localScheduleListPromise.then(pLocalScheduleListData => {
@@ -37,6 +41,7 @@ export class SchedulesRoute extends PageRoute {
       myThis._handleSchedulesWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {
@@ -97,7 +102,7 @@ export class SchedulesRoute extends PageRoute {
       this._addMenuItemShowSchedules(menu, minionId);
 
       minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign(config.NAV_URL + "/schedulesminion?minionid=" + encodeURIComponent(minionId))
+        this.router.showRoute(this.router.schedulesMinionRoute, {"minionId": minionId})
       );
     }
 
@@ -154,13 +159,13 @@ export class SchedulesRoute extends PageRoute {
     this._addMenuItemShowSchedules(menu, pMinionId);
 
     minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign(config.NAV_URL + "/schedulesminion?minionid=" + encodeURIComponent(pMinionId))
+      this.router.showRoute(this.router.schedulesMinionRoute, {"minionId": pMinionId})
     );
   }
 
   _addMenuItemShowSchedules(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;schedules", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/schedulesminion?minionid=" + encodeURIComponent(pMinionId));
+      this.router.showRoute(this.router.schedulesMinionRoute, {"minionId": pMinionId});
     }.bind(this));
   }
 }

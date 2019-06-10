@@ -17,7 +17,7 @@ export class Route {
     this.runCommand = this.runCommand.bind(this);
   }
 
-  __getName() {
+  getName() {
     return this.name;
   }
 

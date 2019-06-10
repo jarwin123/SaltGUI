@@ -9,11 +9,23 @@ export class GrainsMinionRoute extends PageRoute {
   constructor(pRouter) {
     super("grainsminion", "Grains", "#page-grains-minion", "#button-grains", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
+    const panel = document.getElementById("grains-minion-panel");
+    const menu = new DropDownMenu(panel);
+    //this._addMenuItemAddGrain(menu, "TODO");
+    //this._addMenuItemRefreshGrains(menu, "TODO");
+    // new menu's are always added at the bottom of the div
+    // fix that by re-adding it to its proper place
+    const title = document.getElementById("grains-minion-title");
+    panel.insertBefore(menu.menuDropdown, title.nextSibling);
+
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
     const closeButton = this.pageElement.querySelector("#grains-minion-button-close");
     closeButton.addEventListener("click", pClickEvent =>
-      this.router.goTo("/grains")
+      this.router.showRoute(this.router.grainsRoute)
     );
 
     Utils.makeTableSortable(this.getPageElement());
@@ -23,7 +35,7 @@ export class GrainsMinionRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+    const minionId = window.sessionStorage.getItem("minionid");
 
     const titleElement = document.getElementById("grains-minion-title");
     titleElement.innerText = "Grains on " + minionId;
@@ -32,12 +44,14 @@ export class GrainsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("minion-list");
     localGrainsItemsPromise.then(pLocalGrainsItemsData => {
       myThis._handleLocalGrainsItems(pLocalGrainsItemsData, minionId);
     }, pLocalGrainsItemsMsg => {
       myThis._handleLocalGrainsItems(JSON.stringify(pLocalGrainsItemsMsg), minionId);
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {

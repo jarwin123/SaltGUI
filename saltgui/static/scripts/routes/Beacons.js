@@ -8,6 +8,9 @@ export class BeaconsRoute extends PageRoute {
   constructor(pRouter) {
     super("beacons", "Beacons", "#page-beacons", "#button-beacons", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
     this._handleBeaconsWheelKeyListAll = this._handleBeaconsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
 
@@ -23,6 +26,7 @@ export class BeaconsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("minion-list");
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
       localBeaconsListPromise.then(pLocalBeaconsListData => {
@@ -37,6 +41,7 @@ export class BeaconsRoute extends PageRoute {
       myThis._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {
@@ -99,9 +104,9 @@ export class BeaconsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowBeacons(menu, minionId);
 
-      minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign(config.NAV_URL + "/beaconsminion?minionid=" + encodeURIComponent(minionId))
-      );
+      minionTr.addEventListener("click", pClickEvent => {
+        this.router.showRoute(this.router.beaconsMinionRoute, {"minionid": minionId});
+      });
     }
 
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
@@ -146,14 +151,14 @@ export class BeaconsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowBeacons(menu, pMinionId);
 
-    minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign(config.NAV_URL + "/beaconsminion?minionid=" + encodeURIComponent(pMinionId))
-    );
+    minionTr.addEventListener("click", pClickEvent => {
+      this.router.showRoute(this.router.beaconsMinionRoute, {"minionid": pMinionId});
+    });
   }
 
   _addMenuItemShowBeacons(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;beacons", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/beaconsminion?minionid=" + encodeURIComponent(pMinionId));
+      this.router.showRoute(this.router.beaconsMinionRoute, {"minionid": pMinionId});
     }.bind(this));
   }
 }

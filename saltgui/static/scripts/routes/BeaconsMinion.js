@@ -10,11 +10,14 @@ export class BeaconsMinionRoute extends PageRoute {
   constructor(pRouter) {
     super("beaconsminion", "Beacons", "#page-beacons-minion", "#button-beacons", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
     this._handleLocalBeaconsList = this._handleLocalBeaconsList.bind(this);
 
     const closeButton = this.pageElement.querySelector("#beacons-minion-button-close");
     closeButton.addEventListener("click", pClickEvent =>
-      this.router.goTo("/beacons")
+      this.router.showRoute(this.router.beaconsRoute)
     );
 
     Utils.addTableHelp(this.getPageElement(), "The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk.\nIn that case, effectively only one of the values is visible here.");
@@ -25,18 +28,20 @@ export class BeaconsMinionRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+    const minionId = window.sessionStorage.getItem("minionid");
 
     const localBeaconsListPromise = this.router.api.getLocalBeaconsList(minionId);
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("minion-list");
     localBeaconsListPromise.then(pLocalBeaconsListData => {
       myThis._handleLocalBeaconsList(pLocalBeaconsListData, minionId);
     }, pLocalBeaconsListMsg => {
       myThis._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {
@@ -189,7 +194,7 @@ export class BeaconsMinionRoute extends PageRoute {
   }
 
   handleSaltBeaconEvent(pTag, pData) {
-    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+    const minionId = window.sessionStorage.getItem("minionid");
     const prefix = "salt/beacon/" + minionId + "/";
     if(!pTag.startsWith(prefix)) return;
     const table = document.getElementById("beacons-minion-list");

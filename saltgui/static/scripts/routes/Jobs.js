@@ -13,6 +13,16 @@ export class JobsRoute extends PageRoute {
     this._getJobDetails = this._getJobDetails.bind(this);
     this._updateNextJob = this._updateNextJob.bind(this);
 
+    const panel = document.getElementById("jobs-panel");
+    const menu = new DropDownMenu(panel);
+    this._addMenuItemShowSomeWhenNeeded(menu);
+    this._addMenuItemShowEligibleWhenNeeded(menu);
+    this._addMenuItemShowAllWhenNeeded(menu);
+    // new menu's are always added at the bottom of the div
+    // fix that by re-adding it to its proper place
+    const title = document.getElementById("jobs-title");
+    panel.insertBefore(menu.menuDropdown, title.nextSibling);
+
     Utils.makeTableSortable(this.getPageElement(), true);
     Utils.makeTableSearchable(this.getPageElement());
   }
@@ -23,7 +33,8 @@ export class JobsRoute extends PageRoute {
     const patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
 
     const maxJobs = 50;
-    let cnt = decodeURIComponent(Utils.getQueryParam("cnt", "" + maxJobs));
+    let cnt = window.sessionStorage.getItem("cnt");
+    if(!cnt) cnt = "" + maxJobs;
     if(cnt === "eligible")
       cnt = 10000;
     else if(cnt === "all")
@@ -83,26 +94,26 @@ export class JobsRoute extends PageRoute {
 
   _addMenuItemShowSomeWhenNeeded(pMenu) {
     const maxJobs = 50;
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    const cnt = window.sessionStorage.getItem("cnt");
     if(cnt === ""+maxJobs) return;
     pMenu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
+      this.router.showRoute(this.router.jobsRoute, {"cnt": maxJobs});
     }.bind(this));
   }
 
   _addMenuItemShowEligibleWhenNeeded(pMenu) {
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    const cnt = window.sessionStorage.getItem("cnt");
     if(cnt === "eligible") return;
     pMenu.addMenuItem("Show&nbsp;eligible&nbsp;jobs", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
+      this.router.showRoute(this.router.jobsRoute, {"cnt": "eligible"});
     }.bind(this));
   }
 
   _addMenuItemShowAllWhenNeeded(pMenu) {
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    const cnt = window.sessionStorage.getItem("cnt");
     if(cnt === "all") return;
     pMenu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=all");
+      this.router.showRoute(this.router.jobsRoute, {"cnt": "all"});
     }.bind(this));
   }
 
@@ -172,21 +183,24 @@ export class JobsRoute extends PageRoute {
 
     pContainer.appendChild(tr);
 
+    const myThis = this;
     tr.addEventListener("click", pClickEvent =>
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id))
+      myThis.router.showRoute(myThis.router.jobRoute, {"jobid": job.id, "back": myThis.router.routes.indexOf(myThis)})
     );
   }
 
   _addJobsMenuItemShowDetails(pMenu, job) {
+    const myThis = this;
     pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
+      myThis.router.showRoute(myThis.router.jobRoute, {"jobid": job.id, "back": myThis.router.routes.indexOf(myThis)});
     }.bind(this));
   }
 
   _addMenuItemJobsRerunJob(pMenu, job, argumentsText) {
+    const myThis = this;
     // 2011 = NON-BREAKING HYPHEN
     pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(pClickEvent) {
-      this.runFullCommand(pClickEvent, job["Target-type"], job.Target, job.Function + argumentsText);
+      myThis.runFullCommand(pClickEvent, job["Target-type"], job.Target, job.Function + argumentsText);
     }.bind(this));
   }
 

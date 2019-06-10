@@ -8,6 +8,9 @@ export class TemplatesRoute extends PageRoute {
   constructor(pRouter) {
     super("templates", "Templates", "#page-templates", "#button-templates", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
     this._handleTemplatesWheelConfigValues = this._handleTemplatesWheelConfigValues.bind(this);
 
     Utils.makeTableSortable(this.getPageElement());
@@ -21,12 +24,14 @@ export class TemplatesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("templates-list");
     wheelConfigValuesPromise.then(pWheelConfigValuesData => {
       myThis._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
     }, pWheelConfigValuesMsg => {
       myThis._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {

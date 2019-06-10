@@ -10,11 +10,14 @@ export class SchedulesMinionRoute extends PageRoute {
   constructor(pRouter) {
     super("schedulesminion", "Schedules", "#page-schedules-minion", "#button-schedules", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
     const closeButton = this.pageElement.querySelector("#schedules-minion-button-close");
     closeButton.addEventListener("click", pClickEvent =>
-      this.router.goTo("/schedules")
+      this.router.showRoute(this.router.schedulesRoute)
     );
 
     Utils.makeTableSortable(this.getPageElement());
@@ -24,7 +27,7 @@ export class SchedulesMinionRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+    const minionId = window.sessionStorage.getItem("minionid");
 
     // preliminary title
     const titleElement = document.getElementById("schedules-minion-title");
@@ -34,12 +37,14 @@ export class SchedulesMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("minion-list");
     localScheduleListPromise.then(pLocalScheduleListData => {
       myThis._handleLocalScheduleList(pLocalScheduleListData, minionId);
     }, pLocalScheduleListMsg => {
       myThis._handleLocalScheduleList(JSON.stringify(pLocalScheduleListMsg), minionId);
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {

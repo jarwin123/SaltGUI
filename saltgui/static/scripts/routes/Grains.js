@@ -9,6 +9,9 @@ export class GrainsRoute extends PageRoute {
   constructor(pRouter) {
     super("grains", "Grains", "#page-grains", "#button-grains", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
     this._handleGrainsWheelKeyListAll = this._handleGrainsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
 
@@ -49,6 +52,7 @@ export class GrainsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("minion-list");
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleGrainsWheelKeyListAll(pWheelKeyListAllData);
       localGrainsItemsPromise.then(pLocalGrainsItemsData => {
@@ -63,6 +67,7 @@ export class GrainsRoute extends PageRoute {
       myThis._handleGrainsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {
@@ -95,9 +100,9 @@ export class GrainsRoute extends PageRoute {
         minionTr.appendChild(Route.createTd("", ""));
       }
 
-      minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(minionId))
-      );
+      minionTr.addEventListener("click", pClickEvent => {
+        this.router.showRoute(this.router.grainsMinionRoute, {"minionid": minionId});
+      });
     }
 
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
@@ -173,14 +178,14 @@ export class GrainsRoute extends PageRoute {
       minionTr.appendChild(td);
     }
 
-    minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(pMinionId))
-    );
+    minionTr.addEventListener("click", pClickEvent => {
+      this.router.showRoute(this.router.grainsMinionRoute, {"minionid": pMinionId});
+    });
   }
 
   _addMenuItemShowGrains(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;grains", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(pMinionId));
+      this.router.showRoute(this.router.grainsMinionRoute, {"minionid": pMinionId});
     }.bind(this));
   }
 }

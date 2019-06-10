@@ -9,11 +9,14 @@ export class PillarsMinionRoute extends PageRoute {
   constructor(pRouter) {
     super("pillarsminion", "Pillars", "#page-pillars-minion", "#button-pillars", pRouter);
 
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
+
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
     const closeButton = this.pageElement.querySelector("#pillars-minion-button-close");
     closeButton.addEventListener("click", pClickEvent =>
-      this.router.goTo("/pillars")
+      this.router.showRoute(this.router.pillarsRoute)
     );
 
     Utils.makeTableSortable(this.getPageElement());
@@ -23,7 +26,7 @@ export class PillarsMinionRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+    const minionId = window.sessionStorage.getItem("minionid");
 
     const titleElement = document.getElementById("pillars-minion-title");
     titleElement.innerText = "Pillars on " + minionId;
@@ -32,12 +35,14 @@ export class PillarsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.cleanTableAndStatus("minion-list");
     localPillarItemsPromise.then(pLocalPillarItemsData => {
       myThis._handleLocalPillarItems(pLocalPillarItemsData, minionId);
     }, pLocalPillarItemsMsg => {
       myThis._handleLocalPillarItems(JSON.stringify(pLocalPillarItemsMsg), minionId);
     });
 
+    this.cleanTableAndStatus("job-list");
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {
