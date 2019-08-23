@@ -1,7 +1,7 @@
 import {API} from './Api.js';
 import {BeaconsMinionRoute} from './routes/BeaconsMinion.js';
 import {BeaconsRoute} from './routes/Beacons.js';
-import {CommandBox} from './CommandBox.js';
+import {CmdRoute} from './routes/Cmd.js';
 import {GrainsMinionRoute} from './routes/GrainsMinion.js';
 import {GrainsRoute} from './routes/Grains.js';
 import {JobRoute} from './routes/Job.js';
@@ -22,7 +22,6 @@ export class Router {
     this._logoutTimer = this._logoutTimer.bind(this);
 
     this.api = new API();
-    this.commandbox = new CommandBox(this.api);
     this.currentRoute = undefined;
     this.routes = [];
 
@@ -41,6 +40,7 @@ export class Router {
     this._registerRoute(new JobsRoute(this));
     this._registerRoute(new TemplatesRoute(this));
     this._registerRoute(new OptionsRoute(this));
+    this._registerRoute(new CmdRoute(this));
 
     // show template menu item if templates defined
     const templatesText = window.sessionStorage.getItem("templates");
@@ -151,6 +151,11 @@ export class Router {
         this.api.logout().then(
           pLogoutData => window.location.replace(config.NAV_URL + "/login?reason=logout"));
       });
+
+    document.querySelector("#button-cmd")
+      .addEventListener('click', pClickEvent =>
+        window.location.replace("/cmd")
+      );
 
     // don't verify the session too often
     setInterval(this._logoutTimer, 60000);

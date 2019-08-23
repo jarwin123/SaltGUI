@@ -7,11 +7,11 @@ export class Documentation {
   // formatting of the documentation is done as a regular output type
   // that is therefore in output.js
 
-  constructor (pCommandBox) {
-    this.commandbox = pCommandBox;
+  constructor (pCmd) {
+    this.commandbox = pCmd;
     this._manualRunMenuSysDocRun = this._manualRunMenuSysDocRun.bind(this);
 
-    pCommandBox.cmdmenu.addMenuItem(
+    pCmd.cmdmenu.addMenuItem(
       this._manualRunMenuSysDocPrepare,
       this._manualRunMenuSysDocRun);
   }

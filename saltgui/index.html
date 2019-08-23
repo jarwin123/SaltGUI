@@ -14,6 +14,7 @@
     <link rel='stylesheet' type='text/css' href='static/stylesheets/dropdown.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/tooltip.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/options.css' />
+    <link rel='stylesheet' type='text/css' href='static/stylesheets/cmd.css' />
     <link rel='shortcut icon' href='static/images/icon.png' />
   </head>
 
@@ -41,7 +42,7 @@
         <div class='menu-item' id='button-logout1'>logout</div>
       </div>
 <!-- mini menu -->
-      <div class='fab' id='button-manual-run'>&gt;_</div>
+      <div class='fab' id='button-cmd'>&gt;_</div>
       <div class="minimenu">
         <div class="dropdown">
           <!-- 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger") -->
@@ -518,16 +519,17 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class='popup' id='popup-run-command'>
-      <div class='run-command'>
-        <div class='nearly-visible-button' id='button-close-cmd'>&#x2715;</div>
-        <div><h1>Manual Run</h1><p id="template-menu-here"></p></div>
-        <div id="target-box"><input list="data-list-target" id='target' type='text' placeholder="Target"/></div>
-        <div id="cmd-box"><input id='command' type='text' placeholder="Command"/></div>
-        <div id="run-block"><input id="run-command" type='submit' value="Run command"/></div>
-        <pre class='output'>Waiting for command...</pre>
+      <div class='route' id='page-cmd'>
+        <div class='dashboard'>
+          <div class='panel cmd-list'>
+            <div><h1>Manual Run</h1><p id="template-menu-here"></p></div>
+            <div id="target-box"><input list="data-list-target" id='target' type='text' placeholder="Target"/></div>
+            <div id="cmd-box"><input id='command' type='text' placeholder="Command"/></div>
+            <div id="run-block"><input id="run-command" type='submit' value="Run command"/></div>
+            <pre class='output'>Waiting for command...</pre>
+          </div>
+        </div>
       </div>
     </div>
 
