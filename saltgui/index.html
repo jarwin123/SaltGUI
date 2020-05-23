@@ -11,6 +11,7 @@
     <link rel='stylesheet' type='text/css' href='static/stylesheets/schedules.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/pillars.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/beacons.css' />
+    <link rel='stylesheet' type='text/css' href='static/stylesheets/mine.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/dropdown.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/tooltip.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/options.css' />
@@ -29,6 +30,7 @@
             <div class="run-command-button menu-item" id='button-schedules1'>schedules</div>
             <div class="run-command-button menu-item" id='button-pillars1'>pillars</div>
             <div class="run-command-button menu-item" id='button-beacons1'>beacons</div>
+            <div class="run-command-button menu-item" id='button-mine1'>mine</div>
           </div>
         </div>
         <div class='menu-item' id='button-keys1'>keys</div>
@@ -52,6 +54,7 @@
             <div class="run-command-button menu-item" id='button-schedules2'>-&nbsp;schedules</div>
             <div class="run-command-button menu-item" id='button-pillars2'>-&nbsp;pillars</div>
             <div class="run-command-button menu-item" id='button-beacons2'>-&nbsp;beacons</div>
+            <div class="run-command-button menu-item" id='button-mine2'>-&nbsp;mine</div>
             <div class='run-command-button menu-item' id='button-keys2'>keys</div>
             <div class="run-command-button menu-item" id="button-jobs2">jobs</div>
             <div class='run-command-button menu-item menu-item-hidden' id='button-templates2'>-&nbsp;templates</div>
@@ -325,6 +328,54 @@
             <table id="beacons-minion-list" class='beacons highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Config</th><th>Value</th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <div class='msg'>(loading)</div>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <div class='msg'>(loading)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class='route' id='page-mine'>
+        <div class='dashboard'>
+          <div class='panel minion-list'>
+            <h1>Mine</h1>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="minions" class='minions highlight-rows sortable'>
+              <thead>
+                <tr><th>Minion</th><th>Status</th><th>Mine</th><th class="sorttable_nosort"></th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <div class='msg'>(loading)</div>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <div class='msg'>(loading)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class='route' id='page-mine-minion'>
+        <div class='dashboard'>
+          <div id="mine-minion-panel" class='panel minion-list'>
+            <!-- 2715 = MULTIPLICATION X -->
+            <div class='nearly-visible-button' id='mine-minion-button-close'>&#x2715;</div>
+            <h1 id="mine-minion-title">Mine on ...</h1>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="mine-minion-list" class='mine highlight-rows sortable'>
+              <thead>
+                <tr><th>Name</th><th class="sorttable_nosort"></th><th>Value</th><th>Value</th></tr>
               </thead>
               <tbody>
               </tbody>

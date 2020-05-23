@@ -8,6 +8,8 @@ import {JobRoute} from './routes/Job.js';
 import {JobsRoute} from './routes/Jobs.js';
 import {KeysRoute} from './routes/Keys.js';
 import {LoginRoute} from './routes/Login.js';
+import {MineMinionRoute} from './routes/MineMinion.js';
+import {MineRoute} from './routes/Mine.js';
 import {MinionsRoute} from './routes/Minions.js';
 import {OptionsRoute} from './routes/Options.js';
 import {PillarsMinionRoute} from './routes/PillarsMinion.js';
@@ -31,6 +33,8 @@ export class Router {
     this._registerRoute(this.keysRoute = new KeysRoute(this));
     this._registerRoute(new GrainsRoute(this));
     this._registerRoute(new GrainsMinionRoute(this));
+    this._registerRoute(new MineRoute(this));
+    this._registerRoute(new MineMinionRoute(this));
     this._registerRoute(new SchedulesRoute(this));
     this._registerRoute(new SchedulesMinionRoute(this));
     this._registerRoute(new PillarsRoute(this));
@@ -112,6 +116,15 @@ export class Router {
     document.querySelector("#button-beacons2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/beacons")
+      );
+
+    document.querySelector("#button-mine1")
+      .addEventListener('click', pClickEvent =>
+        window.location.replace(config.NAV_URL + "/mine")
+      );
+    document.querySelector("#button-mine2")
+      .addEventListener('click', pClickEvent =>
+        window.location.replace(config.NAV_URL + "/mine")
       );
 
     document.querySelector("#button-keys1")
@@ -215,7 +228,8 @@ export class Router {
       if(elem1.id === "button-pillars1" ||
          elem1.id === "button-schedules1" ||
          elem1.id === "button-grains1" ||
-         elem1.id === "button-beacons1") {
+         elem1.id === "button-beacons1" ||
+         elem1.id === "button-mine1") {
         minionMenuItem.classList.add("menu-item-active");
       }
       if(elem1.id === "button-jobs1" ||

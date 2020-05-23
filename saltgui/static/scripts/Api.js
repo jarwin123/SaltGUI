@@ -98,6 +98,37 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getLocalMineGet(pMinionId, pMineTarget, pMineItem) {
+    const params = {
+      client: "local",
+      fun: "mine.get",
+      arg: [pMineTarget, pMineItem],
+    };
+    if(pMinionId) {
+      params.tgt_type = "list";
+      params.tgt = pMinionId;
+    } else {
+      params.tgt_type = "glob";
+      params.tgt = "*";
+    }
+    return this.apiRequest("POST", "/", params);
+  }
+
+  getLocalMineValid(pMinionId) {
+    const params = {
+      client: "local",
+      fun: "mine.valid",
+    };
+    if(pMinionId) {
+      params.tgt_type = "list";
+      params.tgt = pMinionId;
+    } else {
+      params.tgt_type = "glob";
+      params.tgt = "*";
+    }
+    return this.apiRequest("POST", "/", params);
+  }
+
   getLocalPillarItems(pMinionId) {
     const params = {
       client: "local",
