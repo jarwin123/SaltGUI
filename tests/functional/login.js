@@ -121,7 +121,7 @@ describe('Funtional tests', function() {
           return document.location.href.includes('login');
         })
         .wait(1000)
-        .evaluate( () => { return document.location.href; })
+        .evaluate( () => { return document.location.href + document.location.hash; })
         .end()
         .then( href => {
           // and we redirected to the login page
