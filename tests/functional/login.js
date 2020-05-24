@@ -117,7 +117,7 @@ describe('Funtional tests', function() {
           return loginpage.style.display === '';
         })
         .wait( () => {
-          return document.location.pathname === '/login');
+          return document.location.pathname === '/login';
         })
         .wait(1000)
         .evaluate( () => { return document.location.pathname + ":" + document.location.search; })
