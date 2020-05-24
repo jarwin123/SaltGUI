@@ -115,6 +115,8 @@ table tr td {
 .options td,
 .templates th,
 .templates td,
+.orchestrations th,
+.orchestrations td,
 .jobs th,
 .jobs td,
 .beacons th,

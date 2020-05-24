@@ -177,6 +177,15 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getRunnerStateOrchestrateShowSls() {
+    const params = {
+      client: "runner",
+      fun: "state.orchestrate_show_sls",
+      arg: ["*"]
+    };
+    return this.apiRequest("POST", "/", params);
+  }
+
   getWheelConfigValues() {
     const params = {
       client: "wheel",

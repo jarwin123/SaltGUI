@@ -15,6 +15,7 @@ import {PillarsRoute} from './routes/Pillars.js';
 import {SchedulesMinionRoute} from './routes/SchedulesMinion.js';
 import {SchedulesRoute} from './routes/Schedules.js';
 import {TemplatesRoute} from './routes/Templates.js';
+import {OrchestrationsRoute} from './routes/Orchestrations.js';
 
 export class Router {
 
@@ -40,15 +41,33 @@ export class Router {
     this._registerRoute(this.jobRoute = new JobRoute(this));
     this._registerRoute(new JobsRoute(this));
     this._registerRoute(new TemplatesRoute(this));
+    this._registerRoute(new OrchestrationsRoute(this));
     this._registerRoute(new OptionsRoute(this));
 
     // show template menu item if templates defined
     const templatesText = window.sessionStorage.getItem("templates");
-    if(templatesText && templatesText !== "undefined") {
-      const item1 = document.querySelector("#button-templates1");
-      item1.style.display = "inline-block";
-      const item2 = document.querySelector("#button-templates2");
-      item2.style.display = "inline-block";
+    const templatesItem1 = document.querySelector("#button-templates1");
+    const templatesItem2 = document.querySelector("#button-templates2");
+    if(templatesText != "" && templatesText !== "undefined" && templatesText !== "{}") {
+console.log("show");
+      templatesItem1.classList.remove("menu-item-hidden");
+      templatesItem2.classList.remove("menu-item-hidden");
+    } else {
+console.log("hide");
+      templatesItem1.classList.add("menu-item-hidden");
+      templatesItem2.classList.add("menu-item-hidden");
+    }
+
+    // show ochestrations menu item if ochestrations defined
+    const orchestrationsText = window.sessionStorage.getItem("orchestrations");
+    const orchestrationsItem1 = document.querySelector("#button-orchestrations1");
+    const orchestrationsItem2 = document.querySelector("#button-orchestrations2");
+    if(orchestrationsText != "" && orchestrationsText !== "undefined" && orchestrationsText !== "{}") {
+      orchestrationsItem1.classList.remove("menu-item-hidden");
+      orchestrationsItem2.classList.remove("menu-item-hidden");
+    } else {
+      orchestrationsItem1.classList.add("menu-item-hidden");
+      orchestrationsItem2.classList.add("menu-item-hidden");
     }
 
     this._registerRouterEventListeners();
@@ -141,6 +160,15 @@ export class Router {
         window.location.replace(config.NAV_URL + "/templates")
       );
 
+    document.querySelector("#button-orchestrations1")
+      .addEventListener('click', pClickEvent =>
+        window.location.replace(config.NAV_URL + "/orchestrations")
+      );
+    document.querySelector("#button-orchestrations2")
+      .addEventListener('click', pClickEvent =>
+        window.location.replace(config.NAV_URL + "/orchestrations")
+      );
+
     document.querySelector("#button-logout1")
       .addEventListener("click", pClickEvent => {
         this.api.logout().then(
@@ -219,7 +247,8 @@ export class Router {
         minionMenuItem.classList.add("menu-item-active");
       }
       if(elem1.id === "button-jobs1" ||
-         elem1.id === "button-templates1") {
+         elem1.id === "button-templates1" ||
+         elem1.id === "button-orchestrations1") {
         jobsMenuItem.classList.add("menu-item-active");
       }
     }

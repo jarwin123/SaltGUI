@@ -35,7 +35,8 @@
         <div class="dropdown">
           <div class="menu-item" id="button-jobs1">jobs</div>
           <div class="dropdown-content">
-            <div class='run-command-button menu-item menu-item-hidden' id='button-templates1'>templates</div>
+            <div class='run-command-button menu-item' id='button-templates1'>templates</div>
+            <div class='run-command-button menu-item' id='button-orchestrations1'>orchestrations</div>
           </div>
         </div>
         <div class='menu-item' id='button-logout1'>logout</div>
@@ -54,7 +55,8 @@
             <div class="run-command-button menu-item" id='button-beacons2'>-&nbsp;beacons</div>
             <div class='run-command-button menu-item' id='button-keys2'>keys</div>
             <div class="run-command-button menu-item" id="button-jobs2">jobs</div>
-            <div class='run-command-button menu-item menu-item-hidden' id='button-templates2'>-&nbsp;templates</div>
+            <div class='run-command-button menu-item' id='button-templates2'>-&nbsp;templates</div>
+            <div class='run-command-button menu-item' id='button-orchestrations2'>-&nbsp;orchestrations</div>
             <div class='run-command-button menu-item' id='button-logout2'>logout</div>
           </div>
         </div>
@@ -376,6 +378,29 @@
             <h1>Templates</h1>
             <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
             <table id="templates" class='templates highlight-rows sortable'>
+              <thead>
+                <tr><th>Name</th><th>Description</th><th>Target</th><th>Command</th><th class="sorttable_nosort"></th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <div class='msg'>(loading)</div>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <div class='msg'>(loading)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class='route' id='page-orchestrations'>
+        <div class='dashboard'>
+          <div class='panel orchestrations-list'>
+            <h1>Orchestrations</h1>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="orchestrations" class='orchestrations highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th>Description</th><th>Target</th><th>Command</th><th class="sorttable_nosort"></th></tr>
               </thead>
