@@ -38,14 +38,13 @@ describe('Funtional tests', function() {
     it('we should be redirected to the login page', done => {
       browser
         .wait( () => {
-          return document.location.href.includes('login');
+          return document.location.pathname === '/login';
         })
         .wait(500)
-        .evaluate( () => { return document.location.href; } )
+        .evaluate( () => { return document.location.pathname; } )
         .end()
         .then( href => {
-          //href = href.replace(/[?]reason=.*/, "");
-          assert.equal(href, url + 'login');
+          assert.equal(href, '/login');
         })
         .then(done)
         .catch(done);
@@ -86,10 +85,10 @@ describe('Funtional tests', function() {
           return loginpage.style.display === 'none';
         })
         .wait(1000)
-        .evaluate( () => { return document.location.href; })
+        .evaluate( () => { return document.location.pathname; })
         .end()
         .then( href => {
-          assert.equal(href, url);
+          assert.equal(href, "/");
         })
         .then(done)
         .catch(done);
@@ -118,14 +117,14 @@ describe('Funtional tests', function() {
           return loginpage.style.display === '';
         })
         .wait( () => {
-          return document.location.href.includes('login');
+          return document.location.pathname === '/login');
         })
         .wait(1000)
-        .evaluate( () => { return document.location.href + document.location.search; })
+        .evaluate( () => { return document.location.pathname + ":" + document.location.search; })
         .end()
         .then( href => {
           // and we redirected to the login page
-          assert.equal(href, url + 'login?reason=logout');
+          assert.equal(href, '/login:?reason=logout');
         })
         .then(done)
         .catch(done);
